@@ -1,6 +1,31 @@
-from evennia import Command
+# Much code from the evennia mapbuilder example
+
+from evennia import Command, create_object
 from evennia import CmdSet
 from evennia import default_cmds
+
+from typeclasses import rooms
+
+
+def build_bridge(x, y, **kwargs):
+    room = create_object(rooms.Room, key="bridge" + str(x) + str(y))
+    room.db.desc = "Bridge of the ship."
+
+    # Send a message to the account
+    kwargs["caller"].msg(room.key + " " + room.dbref)
+
+    captains_chair = create_object(key="Chair", location=room)
+    captains_chair.db.desc = "The captain's chair."
+
+    stations = ["navigation", "weapons", "engineering", "communications", "science"]
+    for station in stations:
+        chair = create_object(key="Chair", location=room)
+        chair.db.desc = "Chair for " + station
+        console = create_object(key="Console: " + station)
+        console.db.desc = "Console for " + station
+
+    # Mandatory, usually
+    return room
 
 
 class CmdCreate(Command):
