@@ -30,4 +30,8 @@ class Character(DefaultCharacter):
     at_post_puppet - Echoes "AccountName has entered the game" to the room.
 
     """
-    pass
+
+    def at_object_creation(self):
+        """"This is called when object is first created, only."""
+        self.db.power = 1
+        self.db.combat_score = 1

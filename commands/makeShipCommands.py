@@ -112,6 +112,7 @@ COMMAND_DEFAULT_CLASS = utils.class_from_module(settings.COMMAND_DEFAULT_CLASS)
 
 
 class CmdShipBuilder(COMMAND_DEFAULT_CLASS):
+#class CmdShipBuilder(Command):
     """
     Build a ship from a 2D ASCII map.
 
@@ -119,7 +120,7 @@ class CmdShipBuilder(COMMAND_DEFAULT_CLASS):
         @shipbuilder <class>
 
     Example:
-        @mapbuilder ROUNDABOUT
+        @shipbuilder ROUNDABOUT
 
     This is a command which takes two inputs:
     A string of ASCII characters representing a map and a dictionary of
@@ -134,6 +135,7 @@ class CmdShipBuilder(COMMAND_DEFAULT_CLASS):
     """
     key = "@shipbuilder"
     aliases = ["@buildship"]
+    locks = "cmd:all()"
     help_category = "Building"
 
     def func(self):
@@ -201,38 +203,6 @@ class CmdShipBuilder(COMMAND_DEFAULT_CLASS):
         build_map(caller, game_map, legend, iterations, build_exits)
 
 
-class CmdCreate(Command):
-    """
-    Create a new vanilla ship.
-
-    Usage:
-      create ship [class]
-
-    This will create a new ship. If no
-    class is given, a new basic 4 person ship will be created.
-    """
-    key = "build ship"
-    aliases = ["spawn ship"]
-
-    def func(self):
-        """This actually does the shooting"""
-
-        caller = self.caller
-        location = caller.location
-
-        if not self.args:
-            # no argument given to command - shoot in the air
-            message = "Creating a cute little ship that an pew pew pew!"
-            location.msg_contents(message)
-            return
-
-        # we have an argument, search for target
-        target = caller.search(self.args)
-        if target:
-            message = "Creating a fancy %s" % target.key
-            location.msg_contents(message)
-
-
 class ShipyardCmdSet(CmdSet):
     """
     Constructing ships to pilot around
@@ -241,4 +211,4 @@ class ShipyardCmdSet(CmdSet):
 
     def at_cmdset_creation(self):
         """Called once, when cmdset is first created"""
-        self.add(CmdCreate())
+        self.add(CmdShipBuilder())

@@ -12,4 +12,4 @@ class Shipyard(Object):
         self.cmdset.add_default(default_cmds.CharacterCmdSet)
         self.cmdset.add(ShipyardCmdSet, permanent=True)
         self.locks.add("puppet:all();call:false()")
-        self.db.desc = "This is a huge mech. It has missiles and stuff."
+        self.db.desc = "This is a shipyard."
