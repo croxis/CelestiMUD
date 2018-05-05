@@ -7,6 +7,8 @@ Rooms are simple containers that has no location of their own.
 
 from evennia import DefaultRoom
 
+from typeclasses.character_generation import CharGenCmdSet
+
 
 class Room(DefaultRoom):
     """
@@ -19,3 +21,13 @@ class Room(DefaultRoom):
     properties and methods available on all Objects.
     """
     pass
+
+
+class CharGenRoom(Room):
+    """
+    This room class is used by character-generation rooms. It makes
+    the CharGenCmdSet available.
+    """
+    def at_object_creation(self):
+        """This is called only at first creations"""
+        self.cmdset.add(CharGenCmdSet, permanent=True)
